@@ -116,7 +116,7 @@ jobs:
         working-directory: /builder
         if: (!cancelled())
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           echo "Starting to download the latest fnnas base image..."
           fnnas_base_version="${{ inputs.fnnas_base_version }}"
@@ -124,7 +124,7 @@ jobs:
 
           latest_version=$(curl -s \
               -H "Accept: application/vnd.github+json" \
-              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Authorization: Bearer ${{ secrets.GH_TOKEN }}" \
               https://api.github.com/repos/ophub/fnnas/releases?per_page=20 | \
               jq -r --arg RTK "fnnas_base_image" \
               --arg BOARD "${fnnas_base_version}" \
@@ -146,7 +146,7 @@ jobs:
           echo "Source: ${latest_url}"
 
           curl -fsSL \
-              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Authorization: Bearer ${{ secrets.GH_TOKEN }}" \
               -H "Accept: application/octet-stream" \
               "${latest_url}" \
               -o "fnnas/${fnnas_filename}"
@@ -179,7 +179,7 @@ jobs:
           removeArtifacts: false
           replacesArtifacts: true
           makeLatest: false
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}
           body: |
             - FnNAS Dedicated Kernel. Based on official [.debs](https://github.com/ophub/fnnas/releases/tag/fnnas_debs) packages from `fnnas.com`,
               and repackaged into .tar.gz format using the `rekernel` tool.
