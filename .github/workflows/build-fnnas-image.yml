@@ -12,7 +12,7 @@ on:
       fnnas_base_version:
         description: "Select fnnas base image version"
         required: false
-        default: "amlogic_389"
+        default: "- rockchip_388"
         type: choice
         options:
           - rockchip_388
@@ -29,7 +29,7 @@ on:
       fnnas_board:
         description: "Select fnnas device board"
         required: false
-        default: "all"
+        default: "- nsy-g16-plus"
         type: choice
         options:
           - all
