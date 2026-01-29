@@ -15,6 +15,7 @@ on:
         default: "amlogic_389"
         type: choice
         options:
+          - rockchip_388
           - amlogic_389
           - amlogic_338
           - amlogic_322
