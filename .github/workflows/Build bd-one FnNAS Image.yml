@@ -29,9 +29,10 @@ on:
       fnnas_board:
         description: "Select fnnas device board"
         required: false
-        default: "- bdkj-bd-one"
+        default: "bdkj-bd-one"
         type: choice
         options:
+          - bdkj-bd-one
           - nsy-g16-plus
           - all
           - first50
