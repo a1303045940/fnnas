@@ -427,13 +427,24 @@ jobs:
           cp -f my-boot/u-boot-rk3568-bd-one.itb .
           cp -f my-boot/idbloader-rk3568-bd-one.img .
           
-          # 2. 复制 DTB 文件 (双重保险)
-          # 脚本通常会去 make-fnnas/fnnas-files/dtb/... 找，但为了保险我们也可以复制一份到当前目录
-          # 确保你之前的 dtb 上传路径是对的
-          if [ -f "make-fnnas/fnnas-files/dtb/rockchip/rk3568-bd-one.dtb" ]; then
-            echo "DTB file found in repo, ready for build."
+          # 2. 复制 DTB 文件 (强制注入到标准构建目录)
+          # 定义源文件路径
+          SRC_DTB="make-fnnas/fnnas-files/dtb/rockchip/rk3568-bd-one.dtb"
+          
+          # 检查源文件是否存在
+          if [ -f "$SRC_DTB" ]; then
+            echo "✅ 发现源 DTB 文件: $SRC_DTB"
+            
+            # 【关键步骤】创建脚本预期的标准目录结构
+            mkdir -p fnnas-files/dtb/rockchip/
+            
+            # 【关键步骤】强制复制进去
+            cp -fv "$SRC_DTB" fnnas-files/dtb/rockchip/
+            
+            echo "🚀 已将 DTB 强制注入到 fnnas-files/dtb/rockchip/ 目录，确保脚本能选中它！"
           else
-            echo "Warning: DTB file not found in expected repo path!"
+            echo "❌ 严重警告: 源 DTB 文件未找到！请检查路径: $SRC_DTB"
+            ls -R
           fi
           
           echo "List of custom files ready for build:"
