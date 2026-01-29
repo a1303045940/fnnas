@@ -32,6 +32,7 @@ on:
         default: "- nsy-g16-plus"
         type: choice
         options:
+          - nsy-g16-plus
           - all
           - first50
           - range50_100
