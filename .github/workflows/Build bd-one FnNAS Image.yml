@@ -434,9 +434,7 @@ jobs:
             # 注意：文件名必须和 model_database.conf 里写的一模一样
             cp -fv my-boot/u-boot-rk3568-bd-one.itb "$TARGET_DIR/"
             cp -fv my-boot/idbloader-rk3568-bd-one.img "$TARGET_DIR/"
-            echo "🚀 已将 DTB 强制注入到 fnnas-files/dtb/rockchip/ 目录，确保脚本能选中它！"
-          else
-            echo "❌ 严重警告: 源 DTB 文件未找到！请检查路径: $SRC_DTB"
+            echo "🚀 已将 DTB 强制注入到 fnnas-files/dtb/rockchip/bdkj-bd-one 目录，确保脚本能选中它！"
             ls -R
           fi
           
