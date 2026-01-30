@@ -419,28 +419,44 @@ jobs:
           echo "build_tag=${build_tag}" >> ${GITHUB_ENV}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
-      # 🔥🔥🔥 【开始：插入这段代码】 🔥🔥🔥
+      # 🔥🔥🔥 【开始：修正后的代码】 🔥🔥🔥
       - name: Move Custom Bootloader Files
         run: |
-          echo "Moving custom bootloader files to build directory..."
+          echo "正在注入自定义 Bootloader..."
+          
           # 1. 定义目标目录 (必须匹配 renas 脚本的预期路径)
-          # 结构: make-fnnas/u-boot/rockchip/<你的设备ID>/
+          # renas 脚本会在 make-fnnas/u-boot/rockchip/<你的设备ID>/ 下寻找文件
           TARGET_DIR="make-fnnas/u-boot/rockchip/bdkj-bd-one"
           
-          # 2. 创建目录
+          # 2. 创建目录结构
           mkdir -p "$TARGET_DIR"
           
           # 3. 复制文件进去
-          # 注意：文件名必须和 model_database.conf 里写的一模一样
+          # 请确保 my-boot 目录里有这些文件
           cp -fv my-boot/u-boot-rk3568-bd-one.itb "$TARGET_DIR/"
           cp -fv my-boot/idbloader-rk3568-bd-one.img "$TARGET_DIR/"
           
+          # 4. 顺便把 DTB 也放进去 (双重保险)
+          # 脚本通常去 make-fnnas/fnnas-files/dtb/rockchip/ 找 DTB
+          DTB_TARGET="make-fnnas/fnnas-files/dtb/rockchip"
+          mkdir -p "$DTB_TARGET"
+          # 如果你的仓库里有 dtb，这里也复制一下
+          if [ -f "my-boot/rk3568-bd-one.dtb" ]; then
+             cp -fv my-boot/rk3568-bd-one.dtb "$DTB_TARGET/"
+          elif [ -f "make-fnnas/fnnas-files/dtb/rockchip/rk3568-bd-one.dtb" ]; then
+             # 如果本来就在正确位置，就不用动，或者强制覆盖一下
+             cp -fv "make-fnnas/fnnas-files/dtb/rockchip/rk3568-bd-one.dtb" "$DTB_TARGET/"
+          fi
+
           echo "----------------------------------------"
-          echo "检查注入结果 (renas 将从这里读取):"
+          echo "检查注入结果 (renas 将从这些目录读取):"
+          echo "Bootloader:"
           ls -lhR make-fnnas/u-boot/
+          echo "DTB:"
+          ls -lhR make-fnnas/fnnas-files/dtb/ || echo "DTB目录未创建"
           echo "----------------------------------------"
 
-      # 🔥🔥🔥 【结束：插入代码】 🔥🔥🔥
+        # 🔥🔥🔥 【结束：修正代码】 🔥🔥🔥
       
 
       - name: Packaging fnnas
