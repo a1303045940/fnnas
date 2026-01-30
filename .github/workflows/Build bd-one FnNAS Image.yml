@@ -423,19 +423,22 @@ jobs:
       - name: Move Custom Bootloader Files
         run: |
           echo "Moving custom bootloader files to build directory..."
-            # 1. 定义目标目录 (必须匹配 renas 脚本的预期路径)
-            # 结构: make-fnnas/u-boot/rockchip/<你的设备ID>/
-            TARGET_DIR="make-fnnas/u-boot/rockchip/bdkj-bd-one"
-            
-            # 2. 创建目录
-            mkdir -p "$TARGET_DIR"
-            
-            # 3. 复制文件进去
-            # 注意：文件名必须和 model_database.conf 里写的一模一样
-            cp -fv my-boot/u-boot-rk3568-bd-one.itb "$TARGET_DIR/"
-            cp -fv my-boot/idbloader-rk3568-bd-one.img "$TARGET_DIR/"
-            echo "🚀 已将 DTB 强制注入到 fnnas-files/dtb/rockchip/bdkj-bd-one 目录，确保脚本能选中它！"
-            ls -R
+          # 1. 定义目标目录 (必须匹配 renas 脚本的预期路径)
+          # 结构: make-fnnas/u-boot/rockchip/<你的设备ID>/
+          TARGET_DIR="make-fnnas/u-boot/rockchip/bdkj-bd-one"
+          
+          # 2. 创建目录
+          mkdir -p "$TARGET_DIR"
+          
+          # 3. 复制文件进去
+          # 注意：文件名必须和 model_database.conf 里写的一模一样
+          cp -fv my-boot/u-boot-rk3568-bd-one.itb "$TARGET_DIR/"
+          cp -fv my-boot/idbloader-rk3568-bd-one.img "$TARGET_DIR/"
+          
+          echo "----------------------------------------"
+          echo "检查注入结果 (renas 将从这里读取):"
+          ls -lhR make-fnnas/u-boot/
+          echo "----------------------------------------"
           fi
           
           echo "List of custom files ready for build:"
