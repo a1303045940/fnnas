@@ -420,50 +420,56 @@ jobs:
           echo "status=success" >> ${GITHUB_OUTPUT}
 
 
-      # 🔥🔥🔥 【开始：修正后的代码】 🔥🔥🔥
+# 🔥🔥🔥 【开始：修正后的代码】 🔥🔥🔥
       - name: Move Custom Bootloader Files
         run: |
-          echo "正在注入自定义 Bootloader..."
+          echo "正在注入自定义文件 (Bootloader + DTB)..."
           
-          # ----------------------------------------------------------------
-          # 1. 处理 Bootloader (u-boot & idbloader)
-          # ----------------------------------------------------------------
-          # 定义 renas 脚本预期的专用目录 (必须是相对路径，不能以 / 开头)
+          # ================================================================
+          # 1. 处理 Bootloader (成功部分保持不变)
+          # ================================================================
           TARGET_BOOT_DIR="make-fnnas/u-boot/rockchip/bdkj-bd-one"
-          
-          echo "创建目标目录: $TARGET_BOOT_DIR"
           mkdir -p "$TARGET_BOOT_DIR"
           
-          # 复制文件到专用目录
+          # 从 my-boot 复制 (这步之前成功了)
           cp -fv my-boot/u-boot-rk3568-bd-one.itb "$TARGET_BOOT_DIR/"
           cp -fv my-boot/idbloader-rk3568-bd-one.img "$TARGET_BOOT_DIR/"
-          #cp -fv my-boot/rk3568-bd-one.dtb "$TARGET_BOOT_DIR/"
           
-          # ----------------------------------------------------------------
-          # 2. 处理 DTB 文件 (修正版：注入到 different-files)
-          # ----------------------------------------------------------------
-          # 定义源文件
-          SRC_DTB="make-fnnas/fnnas-files/dtb/rockchip/rk3568-bd-one.dtb"
+          # ================================================================
+          # 2. 处理 DTB 文件 (关键修改点！)
+          # ================================================================
           
-          # 定义【正确】的目标路径
-          # 解释：different-files/<设备名>/bootfs/ 对应生成的固件里的 /boot/
-          # 所以我们要放到 .../bootfs/dtb/rockchip/ 下面
+          # ❌ 之前的错误路径:
+          # SRC_DTB="make-fnnas/fnnas-files/dtb/rockchip/rk3568-bd-one.dtb"
+          
+          # ✅ 修正后的路径 (假设你也放在了 my-boot 文件夹里):
+          SRC_DTB="my-boot/rk3568-bd-one.dtb"
+          
+          # 目标路径 (保持不变，这是对的)
           TARGET_DTB_DIR="make-fnnas/fnnas-files/different-files/bdkj-bd-one/bootfs/dtb/rockchip"
           
           if [ -f "$SRC_DTB" ]; then
-            echo "✅ 发现源 DTB 文件: $SRC_DTB"
+            echo "✅ 在 my-boot 中发现 DTB 文件: $SRC_DTB"
             echo "📂 创建专用覆盖目录: $TARGET_DTB_DIR"
             
-            # 创建层级目录
             mkdir -p "$TARGET_DTB_DIR"
-            
-            # 复制进去
             cp -fv "$SRC_DTB" "$TARGET_DTB_DIR/"
             
-            echo "🚀 DTB 已注入到 different-files，脚本一定会打包它！"
+            echo "🚀 DTB 注入成功！"
           else
-            echo "⚠️ 警告: 未找到源 DTB 文件！"
+            echo "❌ 严重错误: 仍然没找到 DTB 文件！"
+            echo "请检查 my-boot 目录下是否有 rk3568-bd-one.dtb"
+            echo "当前 my-boot 目录内容:"
+            ls -lh my-boot/ || echo "my-boot 目录不存在"
           fi
+          
+          # ================================================================
+          # 3. 最终检查
+          # ================================================================
+          echo "检查 different-files 注入结果:"
+          ls -lhR make-fnnas/fnnas-files/different-files/
+
+      # 🔥🔥🔥 【结束：修正代码】 🔥🔥🔥
       
 
       - name: Packaging fnnas
