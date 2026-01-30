@@ -101,7 +101,8 @@ expansion_partition() {
     echo -e "${INFO} Start repairing hard disk size..."
 
     # Try to fix GPT backup header location
-    printf 'f\n' | parted ---pretend-input-tty /dev/${DISK_NAME} unit s print >/dev/null 2>&1 || echo -e "${INFO} GPT Header check complete."
+    printf 'f\n' | parted ---pretend-input-tty /dev/${DISK_NAME} unit s print >/dev/null 2>&1
+    [[ "${?}" -eq "0" ]] && echo -e "${INFO} GPT Header check complete."
 
     # Check partition count
     pt_num="$(parted -s /dev/${DISK_NAME} print 2>/dev/null | awk '$1~/[1-9]+/ {print $1}' | wc -l)"
@@ -148,7 +149,10 @@ echo -e "${STEPS} Welcome to Partition Expansion Tool."
 # Initialize variables
 init_var
 # Check if root filesystem auto-resize is disabled
-[[ "${rootfs_resize}" == "yes" ]] || exit 0
+[[ "${rootfs_resize}" == "yes" ]] || {
+    echo -e "${INFO} Root filesystem auto-resize is disabled in configuration. Exiting."
+    exit 0
+}
 # Check disk and partition info
 do_checkdisk
 # Expand partition
