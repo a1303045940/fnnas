@@ -414,6 +414,42 @@ jobs:
           echo "build_tag=${build_tag}" >> ${GITHUB_ENV}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
+      # 🔥🔥🔥 【开始：插入这段代码】 🔥🔥🔥
+      - name: Move Custom Bootloader Files
+        run: |
+          echo "Moving custom bootloader files to build directory..."
+          
+          # 1. 复制 Bootloader (u-boot 和 idbloader)
+          # 注意：这里假设你在仓库根目录建了 my-boot 文件夹并上传了文件
+          cp -f my-boot/u-boot-rk3568-bd-one.itb .
+          cp -f my-boot/idbloader-rk3568-bd-one.img .
+          
+          # 2. 复制 DTB 文件 (强制注入到标准构建目录)
+          # 定义源文件路径
+          SRC_DTB="make-fnnas/fnnas-files/dtb/rockchip/rk3568-bd-one.dtb"
+          
+          # 检查源文件是否存在
+          if [ -f "$SRC_DTB" ]; then
+            echo "✅ 发现源 DTB 文件: $SRC_DTB"
+            
+            # 【关键步骤】创建脚本预期的标准目录结构
+            mkdir -p fnnas-files/dtb/rockchip/
+            
+            # 【关键步骤】强制复制进去
+            cp -fv "$SRC_DTB" fnnas-files/dtb/rockchip/
+            
+            echo "🚀 已将 DTB 强制注入到 fnnas-files/dtb/rockchip/ 目录，确保脚本能选中它！"
+          else
+            echo "❌ 严重警告: 源 DTB 文件未找到！请检查路径: $SRC_DTB"
+            ls -R
+          fi
+          
+          echo "List of custom files ready for build:"
+          ls -lh *rk3568-bd-one* || true
+
+      # 🔥🔥🔥 【结束：插入代码】 🔥🔥🔥
+
+
       - name: Packaging fnnas
         if: ${{ steps.down.outputs.status == 'success' && !cancelled() }}
         uses: ophub/fnnas@main
