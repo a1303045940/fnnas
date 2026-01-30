@@ -437,7 +437,7 @@ jobs:
           # 复制文件到专用目录
           cp -fv my-boot/u-boot-rk3568-bd-one.itb "$TARGET_BOOT_DIR/"
           cp -fv my-boot/idbloader-rk3568-bd-one.img "$TARGET_BOOT_DIR/"
-          cp -fv my-boot/rk3568-bd-one.dtb "$TARGET_BOOT_DIR/"
+          #cp -fv my-boot/rk3568-bd-one.dtb "$TARGET_BOOT_DIR/"
           
           # ----------------------------------------------------------------
           # 2. 处理 DTB 文件 (DTB Injection)
