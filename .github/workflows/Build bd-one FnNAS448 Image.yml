@@ -448,7 +448,7 @@ jobs:
             echo "✅ 发现源 DTB 文件: $SRC_DTB"
             
             # 【关键步骤】创建脚本预期的标准目录结构
-            mkdir -p fnnas-files/dtb/rockchip/
+            mkdir -p /u-boot/rockchip/bdkj-bd-one
             
             # 【关键步骤】强制复制进去
             cp -fv "$SRC_DTB" fnnas-files/dtb/rockchip/
