@@ -417,6 +417,22 @@ jobs:
           echo "build_tag=${build_tag}" >> ${GITHUB_ENV}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
+      - name: Debug - List fnnas Directory
+        run: |
+          echo "========================================"
+          echo "1. 检查软链接指向哪里："
+          ls -l fnnas
+          
+          echo "2. 查看 fnnas 目录下的所有文件："
+          # -R 表示递归显示子目录（如果文件太多建议去掉 -R）
+          # -lh 表示显示详细信息和文件大小
+          ls -lhR fnnas/
+          
+          echo "3. 顺便看看 builder 原始目录："
+          ls -lh /builder/fnnas/ || echo "原始目录不存在"
+          echo "========================================"
+          
+
       - name: Packaging fnnas
         if: ${{ steps.down.outputs.status == 'success' && !cancelled() }}
         uses: ophub/fnnas@main
