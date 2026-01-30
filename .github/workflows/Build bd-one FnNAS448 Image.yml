@@ -441,7 +441,8 @@ jobs:
           
           # 2. 复制 DTB 文件 (强制注入到标准构建目录)
           # 定义源文件路径
-          SRC_DTB="make-fnnas/fnnas-files/dtb/rockchip/rk3568-bd-one.dtb"
+          #SRC_DTB="make-fnnas/fnnas-files/dtb/rockchip/rk3568-bd-one.dtb"
+          SRC_DTB="my-boot/rk3568-bd-one.dtb"
           
           # 检查源文件是否存在
           if [ -f "$SRC_DTB" ]; then
