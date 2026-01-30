@@ -418,7 +418,7 @@ jobs:
       - name: Move Custom Bootloader Files
         run: |
           echo "Moving custom bootloader files to build directory..."
-          
+          ls -lh fnnas/
           # 1. 复制 Bootloader (u-boot 和 idbloader)
           # 注意：这里假设你在仓库根目录建了 my-boot 文件夹并上传了文件
           cp -f my-boot/u-boot-rk3568-bd-one.itb .
