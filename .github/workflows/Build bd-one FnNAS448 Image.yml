@@ -444,6 +444,10 @@ jobs:
             ls -R
           fi
           
+          echo "🔎 正在检查构建前的 DTB 仓库..."
+          ls -lh fnnas-files/dtb/rockchip/ | grep "bd-one"
+          echo "如果不显示上面的文件，说明位置没放对！"
+          
           echo "List of custom files ready for build:"
           ls -lh *rk3568-bd-one* || true
 
