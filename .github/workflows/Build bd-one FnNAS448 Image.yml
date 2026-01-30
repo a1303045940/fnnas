@@ -445,7 +445,7 @@ jobs:
           
           # 2. 复制 DTB 文件 (关键修复：路径和目录检查)
           # 你的文件在 my-boot 文件夹里，所以路径必须是 my-boot/xxx
-          SRC_DTB="my-boot/rk3568-bd-one.dtb"
+          SRC_DTB="dtb/rk3568-bd-one.dtb"
           
           if [ -f "$SRC_DTB" ]; then
             echo "✅ 发现源 DTB 文件: $SRC_DTB"
