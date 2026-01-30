@@ -429,49 +429,49 @@ jobs:
           ls -lh /builder/fnnas/ || echo "原始目录不存在"
           echo "========================================"
           
-
+      # 🔥🔥🔥 从这里开始复制，覆盖原文件对应位置 🔥🔥🔥
       - name: Move Custom Bootloader Files
         run: |
           echo "Moving custom bootloader files to build directory..."
           
           # 1. 复制 Bootloader (u-boot 和 idbloader)
-          # 注意：这里假设你在仓库根目录建了 my-boot 文件夹并上传了文件
-          cp -f my-boot/u-boot-rk3568-bd-one.itb .
-          cp -f my-boot/idbloader-rk3568-bd-one.img .
+          # 确保 my-boot 目录存在
+          if [ -d "my-boot" ]; then
+            cp -fv my-boot/u-boot-rk3568-bd-one.itb .
+            cp -fv my-boot/idbloader-rk3568-bd-one.img .
+          else
+            echo "⚠️ 警告: my-boot 目录不存在，跳过 Bootloader 复制"
+          fi
           
-          # 2. 复制 DTB 文件
-          SRC_DTB="dtb/rk3568-bd-one.dtb"
+          # 2. 复制 DTB 文件 (关键修复：路径和目录检查)
+          # 你的文件在 my-boot 文件夹里，所以路径必须是 my-boot/xxx
+          SRC_DTB="my-boot/rk3568-bd-one.dtb"
           
-          # 检查源文件是否存在
           if [ -f "$SRC_DTB" ]; then
             echo "✅ 发现源 DTB 文件: $SRC_DTB"
             
-            # 【修复1】去掉开头的 /，改成相对路径，否则会报 Permission denied
-            echo "📂 创建 Bootloader 目录结构..."
+            # 创建标准目录结构 (注意：不要加开头的 /)
             mkdir -p u-boot/rockchip/bdkj-bd-one
             
-            # 【修复2】确保目标 DTB 目录存在，否则 cp 会报错
-            # 注意：如果 fnnas-files 目录还没生成，这里会强制创建它
+            # 创建目标存放目录
             TARGET_DTB_DIR="fnnas-files/dtb/rockchip"
-            echo "📂 创建 DTB 目标目录: $TARGET_DTB_DIR"
             mkdir -p "$TARGET_DTB_DIR"
             
-            # 强制复制进去
+            # 强制覆盖复制
             cp -fv "$SRC_DTB" "$TARGET_DTB_DIR/"
             
-            echo "🚀 已将 DTB 注入到 $TARGET_DTB_DIR 目录！"
+            echo "🚀 DTB 注入成功！将使用自定义 DTB 构建。"
           else
-            echo "❌ 严重警告: 源 DTB 文件未找到！请检查路径: $SRC_DTB"
-            ls -R my-boot/ || echo "my-boot 目录不存在"
+            echo "❌ 错误: 未找到源文件 $SRC_DTB"
+            echo "当前目录结构:"
+            ls -R || true
           fi
           
-          echo "🔎 检查注入结果..."
-          ls -lh fnnas-files/dtb/rockchip/ | grep "bd-one" || echo "⚠️ 目标目录为空或未找到文件"
-          
-          echo "List of custom files ready for build:"
-          ls -lh *rk3568-bd-one* || true
+          # 调试信息：确认文件是否到位
+          echo "🔎 验证注入结果..."
+          ls -lh fnnas-files/dtb/rockchip/ | grep "bd-one" || echo "⚠️ 目标目录无文件"
 
-
+      # 🔥🔥🔥 这一步非常重要，绝对不能少，且缩进必须对齐 🔥🔥🔥
       - name: Packaging fnnas
         if: ${{ steps.down.outputs.status == 'success' && !cancelled() }}
         uses: ophub/fnnas@main
