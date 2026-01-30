@@ -414,11 +414,26 @@ jobs:
           echo "build_tag=${build_tag}" >> ${GITHUB_ENV}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
+      - name: Debug - List fnnas Directory
+        run: |
+          echo "========================================"
+          echo "1. 检查软链接指向哪里："
+          ls -l fnnas
+          
+          echo "2. 查看 fnnas 目录下的所有文件："
+          # -R 表示递归显示子目录（如果文件太多建议去掉 -R）
+          # -lh 表示显示详细信息和文件大小
+          ls -lhR fnnas/
+          
+          echo "3. 顺便看看 builder 原始目录："
+          ls -lh /builder/fnnas/ || echo "原始目录不存在"
+          echo "========================================"
+          
+
       # 🔥🔥🔥 【开始：插入这段代码】 🔥🔥🔥
       - name: Move Custom Bootloader Files
         run: |
           echo "Moving custom bootloader files to build directory..."
-          ls -lh fnnas/
           # 1. 复制 Bootloader (u-boot 和 idbloader)
           # 注意：这里假设你在仓库根目录建了 my-boot 文件夹并上传了文件
           cp -f my-boot/u-boot-rk3568-bd-one.itb .
