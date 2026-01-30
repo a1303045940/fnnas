@@ -439,10 +439,6 @@ jobs:
           echo "检查注入结果 (renas 将从这里读取):"
           ls -lhR make-fnnas/u-boot/
           echo "----------------------------------------"
-          fi
-          
-          echo "List of custom files ready for build:"
-          ls -lh *rk3568-bd-one* || true
 
       # 🔥🔥🔥 【结束：插入代码】 🔥🔥🔥
       
