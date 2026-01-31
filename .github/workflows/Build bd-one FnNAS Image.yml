@@ -443,7 +443,8 @@ jobs:
           # SRC_DTB="make-fnnas/fnnas-files/dtb/rockchip/rk3568-bd-one.dtb"
           
           # ✅ 修正后的路径 (假设你也放在了 my-boot 文件夹里):
-          SRC_DTB="my-boot/rk3568-bd-one.dtb"
+          #SRC_DTB="my-boot/rk3568-bd-one.dtb"
+          SRC_DTB="dtb/rk3568-bd-one.dtb"
           
           # 目标路径 (保持不变，这是对的)
           TARGET_DTB_DIR="make-fnnas/fnnas-files/different-files/bdkj-bd-one/bootfs/dtb/rockchip"
