@@ -911,7 +911,7 @@ refactor_bootfs() {
     }
 
     # Set uEnv.txt & extlinux.conf mount parameters
-    uenv_rootdev="UUID=${ROOTFS_UUID} rootflags=compress=zstd:1 rw rootwait rootfstype=btrfs"
+    uenv_rootdev="UUID=${ROOTFS_UUID} rootflags=compress=zstd:1 rw rootwait rootfstype=btrfs pci=realloc pcie_aspm=off pci=nomsi"
     # Set armbianEnv.txt mount parameters
     armbianenv_rootdev="UUID=${ROOTFS_UUID}"
     armbianenv_rootflags="compress=zstd:1"
