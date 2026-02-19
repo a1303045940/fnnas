@@ -12,9 +12,10 @@ on:
       fnnas_base_version:
         description: "Select fnnas base image version"
         required: false
-        default: "rockchip_485"
+        default: "rockchip_695"
         type: choice
         options:
+          - rockchip_695
           - rockchip_485
           - rockchip_448
           - rockchip_388
