@@ -539,8 +539,18 @@ update_kernel() {
     # Update release file
     sed -i "s|^KERNEL_VERSION=.*|KERNEL_VERSION='${KERNEL_VERSION}'|g" ${ophub_release_file}
 
+    # Update fnEnv.txt file
+    fnenv_conf_file="/boot/fnEnv.txt"
+    [[ -f "${fnenv_conf_file}" ]] && sed -i "s|^kernelfile=.*|kernelfile=vmlinuz-${kernel_name}|g" ${fnenv_conf_file}
+
     # Delete kernel tmpfiles
     rm -f *${PLATFORM}-${kernel_name}*.tar.gz sha256sums
+    sync && echo ""
+
+    # Update GRUB configuration
+    echo -e "${STEPS} Start updating GRUB configuration..."
+    update-grub >/dev/null 2>&1
+    [[ "${?}" -eq "0" ]] && echo -e "${INFO} GRUB configuration update completed."
 
     sync && echo ""
 }
